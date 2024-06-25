@@ -5,8 +5,8 @@ version = "1.0.0"
 # your project to the Hex package manager.
 #
 description = "A ref cell library for the gleam Erlang target. The mutable references are implemented with Actors, so are not very performant. They should only be used if immutability is not an option"
-licences = ["Apache-2.0"]
-repository = { type = "github", user = "Robert4S", repo = "https://github.com/Robert4S/gleam_ref" }
+licences = ["MIT"]
+repository = { type = "github", user = "Robert4S", repo = "https://github.com/Robert4S/gleam_ref/" }
 # links = [{ title = "Website", href = "https://gleam.run" }]
 #
 # For a full reference of all the available options, you can have a look at
