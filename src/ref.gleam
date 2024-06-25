@@ -48,11 +48,29 @@ pub fn cell(contents: a) {
 
 /// Used for extracting the held data in a RefCell.
 /// Once the value has been extracted with this function, any mutations on the Cell will not affect the data already extracted.
-pub fn get(cell: RefCell(a)) {
+pub fn get(cell: RefCell(a)) -> a {
   actor.call(cell.state, Get(_), 10)
 }
 
 /// Used for setting the inner value of a RefCell
 pub fn set(cell: RefCell(a), contents: a) {
   actor.send(cell.state, Set(contents))
+}
+
+/// Weird restrictive binding operation for a RefCell, as the operation sets the cell to the value that the passed function evaluates to
+pub fn set_fun(cell: RefCell(a), f: fn(a) -> a) -> RefCell(a) {
+  cell
+  |> get
+  |> f
+  |> set(cell, _)
+
+  cell
+}
+
+/// Map the result of a function taking a Cell's contents into a new RefCell. No mutation takes place
+pub fn map(subj: RefCell(a), f: fn(a) -> b) -> RefCell(b) {
+  subj
+  |> get
+  |> f
+  |> cell
 }
