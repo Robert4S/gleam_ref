@@ -4,7 +4,19 @@
 //// the performance benefits that mutability generally provide.
 
 import gleam/erlang/process
+import gleam/io
 import gleam/otp/actor
+
+pub fn main() {
+  let myref = cell(0)
+
+  set(myref, get(myref) + 1)
+  set(myref, get(myref) + 1)
+  set(myref, get(myref) + 1)
+
+  io.debug(get(myref))
+  // -> 3
+}
 
 type Msg(a) {
   Get(reply_with: process.Subject(a))
