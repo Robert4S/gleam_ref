@@ -10,7 +10,16 @@ gleam add ref
 import ref
 
 pub fn main() {
-  // TODO: An example of the project in use
+  let myref = cell(0)
+  io.debug(get(myref))
+  // -> 0
+
+  set(myref, get(myref) + 1)
+  set(myref, get(myref) + 1)
+  set(myref, get(myref) + 1)
+
+  io.debug(get(myref))
+  // -> 3
 }
 ```
 

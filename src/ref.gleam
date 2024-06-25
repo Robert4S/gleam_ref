@@ -9,6 +9,8 @@ import gleam/otp/actor
 
 pub fn main() {
   let myref = cell(0)
+  io.debug(get(myref))
+  // -> 0
 
   set(myref, get(myref) + 1)
   set(myref, get(myref) + 1)
