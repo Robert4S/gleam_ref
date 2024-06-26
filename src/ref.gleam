@@ -61,7 +61,7 @@ pub fn set(cell: RefCell(a), contents: a) -> Nil {
   actor.send(cell.state, Set(contents))
 }
 
-/// Weird restrictive binding operation for a RefCell, as the operation sets the cell to the value that the passed function evaluates to
+/// Mutating map operation for a RefCell. The contents of the cell are set to the result of the passed function.
 pub fn set_fun(cell: RefCell(a), f: fn(a) -> a) -> RefCell(a) {
   cell
   |> get

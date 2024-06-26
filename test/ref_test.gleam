@@ -31,13 +31,28 @@ pub fn imperative_filter_test() {
   let state = ref.cell([])
   {
     use i <- loop(list.range(0, 10_000))
-    case i % 2 == 0 {
-      True -> ref.set(state, [i, ..ref.get(state)])
-      False -> Nil
+    case i % 2 {
+      0 -> ref.set(state, [i, ..ref.get(state)])
+      _ -> Nil
     }
   }
   state
   |> ref.get
   |> list.reverse
   |> should.equal(list.range(0, 10_000) |> list.filter(fn(a) { a % 2 == 0 }))
+}
+
+pub fn set_function_test() {
+  let add = fn(a, b) { a + b }
+
+  let state = ref.cell(list.range(0, 100))
+  {
+    use ls <- ref.set_fun(state)
+    ls
+    |> list.map(add(_, 1))
+  }
+
+  state
+  |> ref.get
+  |> should.equal(list.range(0, 100) |> list.map(add(_, 1)))
 }
