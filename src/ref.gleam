@@ -25,6 +25,7 @@ type Msg(a) {
   Set(a)
 }
 
+@external(javascript, "./ref_extern.mjs", "dummy")
 fn handle_ref(msg: Msg(a), contents: a) -> actor.Next(Msg(a), a) {
   case msg {
     Get(client) -> {
@@ -41,6 +42,7 @@ pub opaque type RefCell(a) {
 }
 
 /// Public constructor for creating a new RefCell. The initial value is passed, and a RefCell containing that value is returned.
+@external(javascript, "./ref_extern.mjs", "cell")
 pub fn cell(contents: a) -> RefCell(a) {
   let assert Ok(state) = actor.start(contents, handle_ref)
   Cell(state)
@@ -48,11 +50,13 @@ pub fn cell(contents: a) -> RefCell(a) {
 
 /// Used for extracting the held data in a RefCell.
 /// Once the value has been extracted with this function, any mutations on the Cell will not affect the data already extracted.
+@external(javascript, "./ref_extern.mjs", "get")
 pub fn get(cell: RefCell(a)) -> a {
   actor.call(cell.state, Get(_), 10)
 }
 
 /// Used for setting the inner value of a RefCell
+@external(javascript, "./ref_extern.mjs", "set")
 pub fn set(cell: RefCell(a), contents: a) -> Nil {
   actor.send(cell.state, Set(contents))
 }
