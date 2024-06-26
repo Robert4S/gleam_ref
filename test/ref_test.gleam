@@ -101,3 +101,10 @@ pub fn proper_updated_value_is_returned() {
   |> ref.get
   |> should.equal(newls)
 }
+
+pub fn killed_actor_should_error_test() {
+  let state = ref.cell(0)
+  ref.kill(state)
+  ref.try_get(state)
+  |> should.be_error
+}
