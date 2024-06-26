@@ -1,7 +1,7 @@
-//// A ref cell library for the gleam erlang target. The implementation uses actors for keeping track of the values
+//// A ref cell library for gleam. The implementation uses actors on the erlang target for keeping track of the values
 //// of references, so a new process is spawned for each mutable reference you create. These mutable references should
-//// only be used if mutability is absolutely required. Immutability should always be preferred, and this implementation loses
-//// the performance benefits that mutability generally provide.
+//// only be used if mutability is absolutely required. Immutability should always be preferred, 
+//// and this implementation loses the performance benefits that mutability generally provides.
 
 import gleam/erlang/process
 import gleam/io

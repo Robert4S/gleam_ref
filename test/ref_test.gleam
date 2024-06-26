@@ -30,6 +30,8 @@ pub fn factorial_test() {
 }
 
 pub fn imperative_filter_test() {
+  let evens = list.filter(_, fn(a) { a % 2 == 0 })
+
   let state = ref.cell([])
   {
     use i <- loop(list.range(0, 10_000))
@@ -41,7 +43,7 @@ pub fn imperative_filter_test() {
   state
   |> ref.get
   |> list.reverse
-  |> should.equal(list.range(0, 10_000) |> list.filter(fn(a) { a % 2 == 0 }))
+  |> should.equal(list.range(0, 10_000) |> evens)
 }
 
 pub fn set_function_test() {
@@ -60,9 +62,11 @@ pub fn set_function_test() {
 }
 
 pub fn concurrent_test() {
+  let sum = list.fold(_, 0, fn(a, b) { a + b })
+
   let state = ref.cell(0)
   {
-    use i <- loop(list.range(0, 10_000))
+    use i <- loop(list.range(0, 100_000))
     process.start(fn() { ref.set(state, fn(a) { i + a }) }, True)
   }
 
@@ -70,13 +74,13 @@ pub fn concurrent_test() {
 
   state
   |> ref.get
-  |> should.equal(list.fold(list.range(0, 10_000), 0, fn(a, b) { a + b }))
+  |> should.equal(sum(list.range(0, 100_000)))
 }
 
-pub fn get_is_constant_test() {
+pub fn get_does_not_get_mutated_test() {
   let state = ref.cell(10)
   let ten = ref.get(state)
-  ref.set(state, fn(_a) { 1 })
+  ref.set(state, fn(_) { 1 })
   state
   |> ref.get
   |> should.not_equal(ten)

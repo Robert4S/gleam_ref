@@ -4,7 +4,7 @@ version = "0.3.0"
 # Fill out these fields if you intend to generate HTML documentation or publish
 # your project to the Hex package manager.
 #
-description = "A ref cell library for the gleam Erlang target. The mutable references are implemented with Actors, so are not very performant. They should only be used if immutability is not an option"
+description = "A ref cell library for gleam. The mutable references for the erlang target are implemented with Actors, so are not very performant. They should only be used if immutability is not an option"
 licences = ["MIT"]
 repository = { type = "github", user = "Robert4S", repo = "gleam_ref" }
 # links = [{ title = "Website", href = "https://gleam.run" }]
