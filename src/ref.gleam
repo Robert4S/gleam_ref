@@ -4,21 +4,7 @@
 //// and this implementation loses the performance benefits that mutability generally provides.
 
 import gleam/erlang/process
-import gleam/io
 import gleam/otp/actor
-
-pub fn main() {
-  let myref = cell(0)
-  io.debug(get(myref))
-  // -> 0
-
-  set(myref, fn(a) { a + 1 })
-  set(myref, fn(a) { a + 1 })
-  set(myref, fn(a) { a + 1 })
-
-  io.debug(get(myref))
-  // -> 3
-}
 
 type Msg(a) {
   Get(reply_with: process.Subject(a))
@@ -46,6 +32,11 @@ pub opaque type RefCell(a) {
 }
 
 /// Public constructor for creating a new RefCell. The initial value is passed, and a RefCell containing that value is returned.
+/// # Examples
+/// ```gleam
+/// let immutable_value: List(Int) = [1, 2, 3, 4]
+/// let mutable_copy: RefCell(List(Int)) = ref.cell(immutable_value)
+/// ```
 @external(javascript, "./ref_extern.mjs", "cell")
 pub fn cell(contents: a) -> RefCell(a) {
   let assert Ok(state) = actor.start(contents, handle_ref)
@@ -54,6 +45,15 @@ pub fn cell(contents: a) -> RefCell(a) {
 
 /// Used for extracting the held data in a RefCell.
 /// Once the value has been extracted with this function, any mutations on the Cell will not affect the data already extracted.
+/// # Examples
+/// ```gleam
+/// let state = ref.cell(20)
+/// ref.get(state) |> io.debug
+/// // > 20
+/// ref.set(state, fn(a) { a + 5 })
+/// ref.get(state) |> io.debug
+/// // > 25
+/// ```
 @external(javascript, "./ref_extern.mjs", "get")
 pub fn get(cell: RefCell(a)) -> a {
   actor.call(cell.state, Get(_), 1000)
