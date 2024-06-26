@@ -72,3 +72,12 @@ pub fn concurrent_test() {
   |> ref.get
   |> should.equal(list.fold(list.range(0, 10_000), 0, fn(a, b) { a + b }))
 }
+
+pub fn get_is_constant_test() {
+  let state = ref.cell(10)
+  let ten = ref.get(state)
+  ref.set(state, fn(_a) { 1 })
+  state
+  |> ref.get
+  |> should.not_equal(ten)
+}
