@@ -12,9 +12,9 @@ pub fn main() {
   io.debug(get(myref))
   // -> 0
 
-  set(myref, get(myref) + 1)
-  set(myref, get(myref) + 1)
-  set(myref, get(myref) + 1)
+  set(myref, fn(a) { a + 1 })
+  set(myref, fn(a) { a + 1 })
+  set(myref, fn(a) { a + 1 })
 
   io.debug(get(myref))
   // -> 3
@@ -22,7 +22,7 @@ pub fn main() {
 
 type Msg(a) {
   Get(reply_with: process.Subject(a))
-  Set(a)
+  Set(fn(a) -> a)
 }
 
 @external(javascript, "./ref_extern.mjs", "dummy")
@@ -32,7 +32,7 @@ fn handle_ref(msg: Msg(a), contents: a) -> actor.Next(Msg(a), a) {
       process.send(client, contents)
       actor.continue(contents)
     }
-    Set(a) -> actor.continue(a)
+    Set(f) -> actor.continue(f(contents))
   }
 }
 
@@ -57,18 +57,8 @@ pub fn get(cell: RefCell(a)) -> a {
 
 /// Used for setting the inner value of a RefCell
 @external(javascript, "./ref_extern.mjs", "set")
-pub fn set(cell: RefCell(a), contents: a) -> Nil {
-  actor.send(cell.state, Set(contents))
-}
-
-/// Mutating map operation for a RefCell. The contents of the cell are set to the result of the passed function.
-pub fn set_fun(cell: RefCell(a), f: fn(a) -> a) -> RefCell(a) {
-  cell
-  |> get
-  |> f
-  |> set(cell, _)
-
-  cell
+pub fn set(cell: RefCell(a), operation: fn(a) -> a) -> Nil {
+  actor.send(cell.state, Set(operation))
 }
 
 /// Map the result of a function taking a Cell's contents into a new RefCell. No mutation takes place

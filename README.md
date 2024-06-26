@@ -14,9 +14,9 @@ pub fn main() {
   io.debug(get(myref))
   // -> 0
 
-  set(myref, get(myref) + 1)
-  set(myref, get(myref) + 1)
-  set(myref, get(myref) + 1)
+  set(myref, fn(a) { a + 1 })
+  set(myref, fn(a) { a + 1 })
+  set(myref, fn(a) { a + 1 })
 
   io.debug(get(myref))
   // -> 3

@@ -21,7 +21,7 @@ pub fn factorial_test() {
   let state = ref.cell(1)
   {
     use i <- loop(list.range(1, 13))
-    ref.set(state, ref.get(state) * i)
+    ref.set(state, fn(a) { a * i })
   }
   ref.get(state)
   |> should.equal(6_227_020_800)
@@ -32,7 +32,7 @@ pub fn imperative_filter_test() {
   {
     use i <- loop(list.range(0, 10_000))
     case i % 2 {
-      0 -> ref.set(state, [i, ..ref.get(state)])
+      0 -> ref.set(state, fn(a) { [i, ..a] })
       _ -> Nil
     }
   }
@@ -47,7 +47,7 @@ pub fn set_function_test() {
 
   let state = ref.cell(list.range(0, 100))
   {
-    use ls <- ref.set_fun(state)
+    use ls <- ref.set(state)
     ls
     |> list.map(add(_, 1))
   }
