@@ -56,13 +56,13 @@ pub fn cell(contents: a) -> RefCell(a) {
 /// Once the value has been extracted with this function, any mutations on the Cell will not affect the data already extracted.
 @external(javascript, "./ref_extern.mjs", "get")
 pub fn get(cell: RefCell(a)) -> a {
-  actor.call(cell.state, Get(_), 10)
+  actor.call(cell.state, Get(_), 500)
 }
 
 /// Pass a function that takes and returns the inner type of the RefCell, and set the contents of the cell to its return value
 @external(javascript, "./ref_extern.mjs", "set")
 pub fn set(cell: RefCell(a), operation: fn(a) -> a) -> a {
-  actor.call(cell.state, Set(operation, _), 10)
+  actor.call(cell.state, Set(operation, _), 500)
 }
 
 /// Map the result of a function taking a Cell's contents into a new RefCell. No mutation takes place
