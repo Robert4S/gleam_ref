@@ -60,6 +60,15 @@ pub fn get(cell: RefCell(a)) -> a {
 }
 
 /// Pass a function that takes and returns the inner type of the RefCell, and set the contents of the cell to its return value
+/// # Examples
+/// ```gleam
+/// let state = ref.cell([1, 2, 3])
+/// ref.set(state, fn(a) { list.map(a, fn(b) { b + 1 }) })
+/// // or
+/// use ls <- ref.set(state)
+/// list.map(ls, fn(a) { a + 1 })
+/// // state -> RefCell([2, 3, 4])
+/// ```
 @external(javascript, "./ref_extern.mjs", "set")
 pub fn set(cell: RefCell(a), operation: fn(a) -> a) -> a {
   actor.call(cell.state, Set(operation, _), 1000)
