@@ -22,7 +22,7 @@ pub fn main() {
 
 type Msg(a) {
   Get(reply_with: process.Subject(a))
-  Set(fn(a) -> a)
+  Set(fn(a) -> a, process.Subject(a))
 }
 
 @external(javascript, "./ref_extern.mjs", "dummy")
@@ -32,7 +32,11 @@ fn handle_ref(msg: Msg(a), contents: a) -> actor.Next(Msg(a), a) {
       process.send(client, contents)
       actor.continue(contents)
     }
-    Set(f) -> actor.continue(f(contents))
+    Set(f, client) -> {
+      let new_contents = f(contents)
+      process.send(client, new_contents)
+      actor.continue(new_contents)
+    }
   }
 }
 
@@ -52,13 +56,13 @@ pub fn cell(contents: a) -> RefCell(a) {
 /// Once the value has been extracted with this function, any mutations on the Cell will not affect the data already extracted.
 @external(javascript, "./ref_extern.mjs", "get")
 pub fn get(cell: RefCell(a)) -> a {
-  actor.call(cell.state, Get(_), 100)
+  actor.call(cell.state, Get(_), 10)
 }
 
 /// Pass a function that takes and returns the inner type of the RefCell, and set the contents of the cell to its return value
 @external(javascript, "./ref_extern.mjs", "set")
-pub fn set(cell: RefCell(a), operation: fn(a) -> a) -> Nil {
-  actor.send(cell.state, Set(operation))
+pub fn set(cell: RefCell(a), operation: fn(a) -> a) -> a {
+  actor.call(cell.state, Set(operation, _), 10)
 }
 
 /// Map the result of a function taking a Cell's contents into a new RefCell. No mutation takes place

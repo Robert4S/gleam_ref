@@ -14,6 +14,7 @@ export function get(ref) {
 
 export function set(ref, fun) {
 	ref.state = fun(ref.state);
+	return get(ref);
 }
 
 export function dummy(_b, _a) { }

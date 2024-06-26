@@ -36,7 +36,10 @@ pub fn imperative_filter_test() {
   {
     use i <- loop(list.range(0, 10_000))
     case i % 2 {
-      0 -> ref.set(state, fn(a) { [i, ..a] })
+      0 -> {
+        ref.set(state, fn(a) { [i, ..a] })
+        Nil
+      }
       _ -> Nil
     }
   }
@@ -84,4 +87,16 @@ pub fn get_does_not_get_mutated_test() {
   state
   |> ref.get
   |> should.not_equal(ten)
+}
+
+pub fn proper_updated_value_is_returned() {
+  let state = ref.cell(list.range(0, 10))
+  let newls = {
+    use ls <- ref.set(state)
+    list.map(ls, fn(a) { a * 2 })
+  }
+
+  state
+  |> ref.get
+  |> should.equal(newls)
 }
