@@ -64,6 +64,7 @@ pub fn set_function_test() {
   |> should.equal(list.range(0, 100) |> list.map(add(_, 1)))
 }
 
+@target(erlang)
 pub fn concurrent_test() {
   let sum = list.fold(_, 0, fn(a, b) { a + b })
 
