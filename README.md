@@ -10,15 +10,15 @@ gleam add ref
 import ref
 
 pub fn main() {
-  let myref = cell(0)
-  io.debug(get(myref))
+  let myref = ref.cell(0)
+  io.debug(ref.get(myref))
   // -> 0
 
-  set(myref, fn(a) { a + 1 })
-  set(myref, fn(a) { a + 1 })
-  set(myref, fn(a) { a + 1 })
+  ref.set(myref, fn(a) { a + 1 })
+  ref.set(myref, fn(a) { a + 1 })
+  ref.set(myref, fn(a) { a + 1 })
 
-  io.debug(get(myref))
+  io.debug(ref.get(myref))
   // -> 3
 }
 ```
