@@ -41,7 +41,7 @@ pub opaque type RefCell(a) {
 }
 
 /// Public constructor for creating a new RefCell. The initial value is passed, and a RefCell containing that value is returned.
-pub fn cell(contents: a) {
+pub fn cell(contents: a) -> RefCell(a) {
   let assert Ok(state) = actor.start(contents, handle_ref)
   Cell(state)
 }
@@ -53,7 +53,7 @@ pub fn get(cell: RefCell(a)) -> a {
 }
 
 /// Used for setting the inner value of a RefCell
-pub fn set(cell: RefCell(a), contents: a) {
+pub fn set(cell: RefCell(a), contents: a) -> Nil {
   actor.send(cell.state, Set(contents))
 }
 
